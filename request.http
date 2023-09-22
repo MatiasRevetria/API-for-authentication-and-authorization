@@ -1,0 +1,26 @@
+GET http://localhost:3000/saludo/Matias HTTP/1.1
+
+###
+
+GET http://localhost:3000/users/Matias HTTP/1.1
+
+###
+
+GET http://localhost:3000/users/Santiago HTTP/1.1
+
+
+### 
+
+POST http://localhost:3000/users/add HTTP/1.1
+Authorization: Admin
+Content-Type: application/json
+
+{
+    "name": "Tomi",
+    "position": "Admin"
+}
+
+###
+
+DELETE http://localhost:3000/kill/6 HTTP/1.1
+Authorization: Admin
