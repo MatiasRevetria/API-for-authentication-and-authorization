@@ -1,5 +1,5 @@
 import express  from 'express';
-import fs from 'fs';
+import fs, { write } from 'fs';
 import bodyParser from 'body-parser';
 
 const app = express();
@@ -17,6 +17,7 @@ const newUser = (info)=>{
         console.log(Error);
     }
 };
+
 function admin(req,res,next){
     const auth = req.headers.authorization;
     if(auth == 'Admin'){
@@ -26,6 +27,7 @@ function admin(req,res,next){
         res.send('Access forbidden');
     }
 }
+
 function isAuth(req,res,next){
     const info = users();
     const auth = req.params.name
@@ -51,6 +53,11 @@ app.get("/users/:name",isAuth,(req,res)=>{
     res.json(req.users);
 });
 
+app.get("/usuarios",(req,res)=>{
+    const data = users();
+    res.json(data.users);
+});
+
 
 app.post("/users/add",admin,(req,res)=>{
     const info = users();
@@ -64,27 +71,18 @@ app.post("/users/add",admin,(req,res)=>{
     res.json(nUser);
 });
 
-app.put("/user/change/:name",(req,res)=>{
+app.put("/change/:name",(req,res)=>{
     const info = users();
     const body = req.body;
     const id = req.params.name;
-    const userIndex = info.users.findIndex((user)=> user.name == id);
+    const userIndex = info.users.findIndex((user)=> user.name === id);
     info.users[userIndex] = {
-        
-    }
-})
-app.put("/books/:id",(req,res)=>{
-    const data = readData();
-    const body = req.body;
-    const id = parseInt(req.params.id);
-    const bookIndex = data.books.findIndex((book) => book.id === id);
-    data.books[bookIndex] = {
-        ...data.books[bookIndex],
+        ...info.users[userIndex],
         ...body,
     };
-    writeData(data);
-    res.json({message: "Book update successfully"});
- });
+    newUser(info);
+    res.json('user update successfully');
+});
 
 app.delete("/kill/:id",admin,(req,res)=>{
     const info = users();

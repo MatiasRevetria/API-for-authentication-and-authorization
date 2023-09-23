@@ -1,4 +1,4 @@
-GET http://localhost:3000/saludo/Matias HTTP/1.1
+GET http://localhost:3000/saludo/andres HTTP/1.1
 
 ###
 
@@ -24,3 +24,17 @@ Content-Type: application/json
 
 DELETE http://localhost:3000/kill/6 HTTP/1.1
 Authorization: Admin
+
+###
+
+PUT http://localhost:3000/change/Andres HTTP/1.1
+Content-Type: application/json
+
+{
+    "name": "Matias",
+    "position": "Admin"
+}
+
+### 
+
+GET http://localhost:3000/usuarios HTTP/1.1
