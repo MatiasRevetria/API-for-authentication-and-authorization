@@ -1,5 +1,5 @@
 import express  from 'express';
-import fs, { write } from 'fs';
+import fs from 'fs';
 import bodyParser from 'body-parser';
 
 const app = express();
@@ -42,24 +42,41 @@ function isAuth(req,res,next){
     }
 };
 
-app.get("/saludo/:name",(req,res)=>{
+app.get("/api/saludo/:name",(req,res)=>{
     const info = users();
     const name = req.params.name;
     const user = info.users.find((user)=> user.name === name);
     res.send('Hola '+user.name+'!');
 })
 
-app.get("/users/:name",isAuth,(req,res)=>{
+app.get("/api/users/:name",isAuth,(req,res)=>{
     res.json(req.users);
 });
 
-app.get("/usuarios",(req,res)=>{
+app.get("/api/usuarios",(req,res)=>{
     const data = users();
     res.json(data.users);
 });
 
+app.get('/api/users/usuario/:position',(req,res)=>{
+    const info = users();
+    const usu = req.params.position;
+    const results = info.users.filter((user) => user.position === usu); 
+    
+    if(results.length == 0){
+        res.status(404).send('No se encontro ningun usuario');
+    }
 
-app.post("/users/add",admin,(req,res)=>{
+    if(req.query.ordenar === 'id'){
+        return res.send(JSON.stringify(results.sort((a,b)=> a.id - b.id)));
+    }
+
+    res.send(JSON.stringify(results));
+
+});
+
+
+app.post("/api/users/add",admin,(req,res)=>{
     const info = users();
     const body = req.body;
     const nUser = {
@@ -71,7 +88,7 @@ app.post("/users/add",admin,(req,res)=>{
     res.json(nUser);
 });
 
-app.put("/change/:name",(req,res)=>{
+app.put("/api/change/:name",(req,res)=>{
     const info = users();
     const body = req.body;
     const id = req.params.name;
@@ -84,7 +101,7 @@ app.put("/change/:name",(req,res)=>{
     res.json('user update successfully');
 });
 
-app.delete("/kill/:id",admin,(req,res)=>{
+app.delete("/api/kill/:id",admin,(req,res)=>{
     const info = users();
     const id = parseInt(req.params.id);
     const userIndex = info.users.findIndex((user)=> user.id === id);
@@ -93,6 +110,8 @@ app.delete("/kill/:id",admin,(req,res)=>{
     res.send('user deleted successfully');
 });
 
-app.listen(3000,()=>{
-    console.log('Server listen on port 3000');
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT,()=>{
+    console.log(`Server listen on port ${PORT}...`);
 });

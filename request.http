@@ -1,17 +1,17 @@
-GET http://localhost:3000/saludo/andres HTTP/1.1
+GET http://localhost:3000/api/saludo/andres HTTP/1.1
 
 ###
 
-GET http://localhost:3000/users/Matias HTTP/1.1
+GET http://localhost:3000/api/users/Matias HTTP/1.1
 
 ###
 
-GET http://localhost:3000/users/Santiago HTTP/1.1
+GET http://localhost:3000/api/users/Santiago HTTP/1.1
 
 
 ### 
 
-POST http://localhost:3000/users/add HTTP/1.1
+POST http://localhost:3000/api/users/add HTTP/1.1
 Authorization: Admin
 Content-Type: application/json
 
@@ -22,12 +22,12 @@ Content-Type: application/json
 
 ###
 
-DELETE http://localhost:3000/kill/6 HTTP/1.1
+DELETE http://localhost:3000/api/kill/6 HTTP/1.1
 Authorization: Admin
 
 ###
 
-PUT http://localhost:3000/change/Andres HTTP/1.1
+PUT http://localhost:3000/api/change/Andres HTTP/1.1
 Content-Type: application/json
 
 {
@@ -37,4 +37,8 @@ Content-Type: application/json
 
 ### 
 
-GET http://localhost:3000/usuarios HTTP/1.1
+GET http://localhost:3000/api/usuarios HTTP/1.1
+
+###
+
+GET http://localhost:3000/api/users/usuario/user HTTP/1.1
