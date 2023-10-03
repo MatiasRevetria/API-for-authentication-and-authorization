@@ -5,6 +5,9 @@ import bodyParser from 'body-parser';
 const app = express();
 app.use(bodyParser.json());
 
+const routerUsers = express.Router();
+app.use('/api/users',routerUsers);
+
 const users = ()=>{
     const info = fs.readFileSync('./dataBase.json');
     return JSON.parse(info);
@@ -42,14 +45,14 @@ function isAuth(req,res,next){
     }
 };
 
-app.get("/api/saludo/:name",(req,res)=>{
+routerUsers.get("/saludo/:name",(req,res)=>{
     const info = users();
     const name = req.params.name;
     const user = info.users.find((user)=> user.name === name);
     res.send('Hola '+user.name+'!');
 })
 
-app.get("/api/users/:name",isAuth,(req,res)=>{
+routerUsers.get("/:name",isAuth,(req,res)=>{
     res.json(req.users);
 });
 
@@ -58,7 +61,7 @@ app.get("/api/usuarios",(req,res)=>{
     res.json(data.users);
 });
 
-app.get('/api/users/usuario/:position',(req,res)=>{
+routerUsers.get('/usuario/:position',(req,res)=>{
     const info = users();
     const usu = req.params.position;
     const results = info.users.filter((user) => user.position === usu); 
@@ -76,7 +79,7 @@ app.get('/api/users/usuario/:position',(req,res)=>{
 });
 
 
-app.post("/api/users/add",admin,(req,res)=>{
+routerUsers.post("/add",admin,(req,res)=>{
     const info = users();
     const body = req.body;
     const nUser = {
